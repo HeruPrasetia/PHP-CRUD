@@ -1,7 +1,7 @@
 <?php
 $server   = "localhost";
 $username = "root";
-$password = "Minervatt";
+$password = "naylatools";
 $db       = "crud";
 try {
    $koneksi = new PDO("mysql:host=$server;dbname=$db", $username, $password, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
