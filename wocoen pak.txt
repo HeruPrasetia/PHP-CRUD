@@ -1,0 +1,5 @@
+1 file index isi ne halaman utama pak
+2 data ne ndk folder view di load kambe jquery
+3 modul edit hapus input ndk folder modul
+4 folder sys isine koneksi database kambe crud
+5 folder assets isine js kambe css
