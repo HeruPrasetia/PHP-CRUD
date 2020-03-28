@@ -2,9 +2,9 @@
 
 class tampil
 {
-  public function tabel($sql, $opsi = false)
+  public function tabel($sql, $opsi = false, $data = false)
   {
-    print "<table class='table table-striped'>";
+    print "<table class='table table-striped' id='tabel'>";
     print "<thead class='thead-dark'><tr>";
     require_once __DIR__ . "/db.php";
     $select = $koneksi->query($sql);
@@ -40,6 +40,11 @@ class tampil
     }
     print "</tr></tbody>";
     print "</table>";
+    if($data != false){
+    print "<script>$(document).ready(function() {
+              $('#tabel').DataTable();
+          } );</script>";
+    }
   }
 
   public function pagination($cek = 50, $pg = 1, $batas = 10, $act = "index.php")

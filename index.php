@@ -10,6 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="assets/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="assets/js/naylatools.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/datatables.min.css"/>
+    <script type="text/javascript" src="assets/js/datatables.min.js"></script>
     <title>Aplikasi Keuangan</title>
 </head>
 

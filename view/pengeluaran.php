@@ -19,7 +19,6 @@
             include "../sys/naylatools.php";
             $tampil = new tampil();
             $tampil->tabel("SELECT * FROM pengeluaran", $menu);
-            $tampil->pagination();
         ?>
         </div>
     </div>

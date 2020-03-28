@@ -15,7 +15,6 @@
             include "../sys/naylatools.php";
             $tampil = new tampil();
             $tampil->tabel("SELECT * FROM pemasukan");
-            $tampil->pagination();
         ?>
         </div>
         <script>
