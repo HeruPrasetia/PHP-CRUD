@@ -5,9 +5,6 @@
     <li class="breadcrumb-item active">Laporan</li>
 </ol>
 <div class="card mb-3">
-    <div class="card-header">
-        <i class="fa fa-table"></i> Laporan
-    </div>
     <div class="card-body">
         <div class="table-responsive">
         <?php
