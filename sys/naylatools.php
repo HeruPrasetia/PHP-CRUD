@@ -1,13 +1,48 @@
 <?php
 
+class database
+{
+  public function pdoDB($host = "localhost", $user = "root", $pwd = "naylatools", $db = "crud")
+  {
+    date_default_timezone_set("Asia/Bangkok");
+
+    try {
+      $kon = new PDO("mysql:host=$host;dbname=$db", $user, $pwd);
+      $kon->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+      $kon->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $kon->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+      print "Koneksi atau query bermasalah: " . $e->getMessage() . "<br/>";
+      die();
+    }
+    return $kon;
+  }
+
+  public function mysqliDB($host = "localhost", $user = "root", $pwd = "naylatools", $db = "crud")
+  {
+    date_default_timezone_set("Asia/Bangkok");
+
+    $kon = mysqli_connect($host, $user, $pwd, $db);
+
+    if (mysqli_connect_errno()) {
+      echo "Koneksi atau query bermasalah: " . mysqli_connect_error();
+      exit();
+    }
+    return $kon;
+  }
+}
+
 class tampil
 {
   public function tabel($sql, $opsi = false, $data = false)
   {
+    $kon = new database();
+    $conn = $kon->pdoDB();
+
     print "<table class='table table-striped' id='tabel'>";
     print "<thead class='thead-dark'><tr>";
-    require_once __DIR__ . "/db.php";
-    $select = $koneksi->query($sql);
+    // require_once __DIR__ . "/db.php";
+    $select = $conn->query($sql);
     $total_column = $select->columnCount();
     for ($counter = 0; $counter < $total_column; $counter++) {
       $meta = $select->getColumnMeta($counter);
@@ -40,8 +75,8 @@ class tampil
     }
     print "</tr></tbody>";
     print "</table>";
-    if($data != false){
-    print "<script>$(document).ready(function() {
+    if ($data != false) {
+      print "<script>$(document).ready(function() {
               $('#tabel').DataTable();
           } );</script>";
     }
@@ -340,53 +375,21 @@ class satpam
   //insert log
   public function kegiatan($kegiatan, $keterangan, $status = "Berhasil")
   {
-    date_default_timezone_set("Asia/Bangkok");
-    $sekarang   = date('Y-m-d H:i:s');
-    $server     = $_COOKIE['host_admin_notaris'];
-    $username   = $_COOKIE['userdb_admin_notaris'];
-    $password   = $_COOKIE['pwd_admin_notaris'];
-    $db         = $_COOKIE['db_admin_notaris'];
-    $dbb       = "master";
-    try {
-      $koneksi = new PDO("mysql:host=$server;dbname=$db", $username, $password);
-      $koneksi->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-      $koneksi->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $koneksi->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-
-      $conn = new PDO("mysql:host=$server;dbname=$dbb", $username, $password);
-      $conn->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    } catch (PDOException $e) {
-      print "Koneksi atau query bermasalah: " . $e->getMessage() . "<br/>";
-      die();
-    }
+    $conn = new database();
+    $kon = $conn->pdoDB();
     $id_user = $_COOKIE['id_admin_notaris'];
     $user = $_COOKIE['usr_admin_notaris'];
     $sekarang = date('Y-m-d H:i:s');
-    $log = $koneksi->query('INSERT INTO dbmlog(Waktu, UserID, NamaUser, Kegiatan, Keterangan, StatusLog) VALUES ("' . $sekarang . '","' . $id_user . '","' . $user . '","' . htmlspecialchars($kegiatan) . '", "' . htmlspecialchars($keterangan) . '", "' . $status . '")');
+    $log = $kon->query('INSERT INTO dbmlog(Waktu, UserID, NamaUser, Kegiatan, Keterangan, StatusLog) VALUES ("' . $sekarang . '","' . $id_user . '","' . $user . '","' . htmlspecialchars($kegiatan) . '", "' . htmlspecialchars($keterangan) . '", "' . $status . '")');
     return $log;
   }
 
   public function akses($id, $lokasi, $akses)
   {
-    date_default_timezone_set("Asia/Bangkok");
-    $sekarang   = date('Y-m-d H:i:s');
-    $server     = $_COOKIE['host_admin_notaris'];
-    $username   = $_COOKIE['userdb_admin_notaris'];
-    $password   = $_COOKIE['pwd_admin_notaris'];
-    $db         = $_COOKIE['db_admin_notaris'];
-    try {
-      $koneksi = new PDO("mysql:host=$server;dbname=$db", $username, $password);
-      $koneksi->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-      $koneksi->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      $koneksi->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    } catch (PDOException $e) {
-      print "Koneksi atau query bermasalah: " . $e->getMessage() . "<br/>";
-      die();
-    }
+    $conn = new database();
+    $kon = $conn->pdoDB();
     $sql = "SELECT count(*) FROM `dbmsetting` a LEFT JOIN master.`dbmmenu` b ON a.`Location` = b.`ID` WHERE a.`Access` = '$akses' AND a.`Location` = '$lokasi' AND a.`IdUser` = '$id' AND b.`StatusMenu` = 1";
-    $cek = $koneksi->query($sql)->fetchColumn();
+    $cek = $kon->query($sql)->fetchColumn();
     return $cek;
     // return print $sql;
   }
