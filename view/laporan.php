@@ -10,13 +10,9 @@
         <?php
             $bulan = date('m');
             $tahun = date('Y');
-            $menu = [
-                "edit" => "<li data-toggle='modal' data-target='#modal' onclick='tes();' style='cursor: pointer;'> <i class='fa fa-edit'></i> Edit</li>",
-                "hapus" => "<li data-toggle='modal' data-target='#modal' onclick='alert(hapus);' style='cursor: pointer;'> <i class='fa fa-trash'></i> Hapus</li>",
-            ];
             include "../sys/naylatools.php";
             $tampil = new tampil();
-            $tampil->tabel("SELECT a.tanggal AS Tanggal, sum(a.jumlah) as Pengeluaran, sum(b.jumlah) as Pemasukan FROM pengeluaran a, pemasukan b WHERE (MONTH(a.tanggal) = $bulan AND YEAR(a.tanggal) = '$tahun') AND (MONTH(b.tanggal) = $bulan AND YEAR(b.tanggal) = '$tahun') GROUP BY a.tanggal ", false, true);
+            $tampil->tabel("SELECT a.tanggal AS Tanggal, sum(a.jumlah) as Pengeluaran, sum(b.jumlah) as Pemasukan FROM pengeluaran a, pemasukan b WHERE (MONTH(a.tanggal) = $bulan AND YEAR(a.tanggal) = '$tahun') AND (MONTH(b.tanggal) = $bulan AND YEAR(b.tanggal) = '$tahun') GROUP BY a.tanggal ");
         ?>
         </div>
     </div>

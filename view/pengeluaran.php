@@ -18,7 +18,7 @@
             ];
             include "../sys/naylatools.php";
             $tampil = new tampil();
-            $tampil->tabel("SELECT * FROM pengeluaran", $menu);
+            $tampil->tabel("SELECT * FROM pengeluaran", $menu, true);
         ?>
         </div>
     </div>
