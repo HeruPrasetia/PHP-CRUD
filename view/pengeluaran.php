@@ -13,12 +13,16 @@
         <div class="table-responsive">
         <?php
             $menu = [
-                "edit" => "<li data-toggle='modal' data-target='#modal' onclick='tes();' style='cursor: pointer;'> <i class='fa fa-edit'></i> Edit</li>",
-                "hapus" => "<li data-toggle='modal' data-target='#modal' onclick='alert(hapus);' style='cursor: pointer;'> <i class='fa fa-trash'></i> Hapus</li>",
+                "edit" => '<button data-toggle="modal" data-target="#modal" onclick="edit()" class="btn btn-primary"> <i class="fa fa-edit"></i> Edit</button>',
+                "hapus" => "<button data-toggle='modal' data-target='#modal' onclick='alert(hapus);' class='btn btn-danger'> <i class='fa fa-trash'></i> Hapus</button>",
+            ];
+            $opsi = [
+                "menu" => $menu,
+                "datatable" => true,
             ];
             include "../sys/naylatools.php";
             $tampil = new tampil();
-            $tampil->tabel("SELECT * FROM pengeluaran", $menu, true);
+            $tampil->tabel("SELECT * FROM pengeluaran", $opsi);
         ?>
         </div>
     </div>

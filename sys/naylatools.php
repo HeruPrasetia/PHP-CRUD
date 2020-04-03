@@ -1,5 +1,4 @@
 <?php
-
 class database
 {
   public function pdoDB($host = "localhost", $user = "root", $pwd = "naylatools", $db = "crud")
@@ -30,55 +29,116 @@ class database
     }
     return $kon;
   }
+
+  public function createDB($dbHost, $dbUsername, $dbPassword, $dbName, $filePath)
+  {
+    $conn = new mysqli($dbHost, $dbUsername, $dbPassword);
+    $sql = "CREATE DATABASE `$dbName` ";
+    if ($conn->query($sql) === TRUE) {
+      $db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
+      $templine = '';
+
+      $lines = file($filePath);
+
+      $error = '';
+
+      foreach ($lines as $line) {
+        if (substr($line, 0, 2) == '--' || $line == '') {
+          continue;
+        }
+
+        $templine .= $line;
+
+        if (substr(trim($line), -1, 1) == ';') {
+          if (!$db->query($templine)) {
+            $error .= 'Error performing query "<b>' . $templine . '</b>": ' . $db->error . '<br /><br />';
+          }
+
+          $templine = '';
+        }
+      }
+      return !empty($error) ? $error : true;
+    } else {
+      echo "Error creating database: " . $conn->error;
+    }
+
+    $conn->close();
+  }
 }
 
 class tampil
 {
-  public function tabel($sql, $opsi = false, $data = false)
+  public function tabel($sql, $opsi = false)
   {
     $kon = new database();
     $conn = $kon->pdoDB();
-
-    print "<table class='table table-striped' id='tabel'>";
-    print "<thead class='thead-dark'><tr>";
-    // require_once __DIR__ . "/db.php";
-    $select = $conn->query($sql);
-    $total_column = $select->columnCount();
-    for ($counter = 0; $counter < $total_column; $counter++) {
-      $meta = $select->getColumnMeta($counter);
-      $column[] = $meta['name'];
-    }
-    foreach ($column as $th) {
-      print "<th>$th</th>";
-    }
     if ($opsi != false) {
-      print "<th>Opsi</th>";
-    }
-    print "</tr></thead><tbody>";
-    $result = $select->fetchAll(\PDO::FETCH_ASSOC);
-    foreach ($result as $td) {
-      print "<tr>";
-      foreach ($td as $hasil) {
-        print "<td>$hasil</td>";
+      print "<table class='table table-striped' id='tabel'>";
+      print "<thead class='thead-dark'><tr>";
+      $select = $conn->query($sql);
+      $total_column = $select->columnCount();
+      for ($counter = 0; $counter < $total_column; $counter++) {
+        $meta = $select->getColumnMeta($counter);
+        $column[] = $meta['name'];
       }
-      if ($opsi != false) {
-        print "<td>
-          <div class='dropdown'>
-          <button class='btn dropdown-toggle' style='background-color: transparent; border-color: none;' type='button' data-toggle='dropdown'><i class='fa fa-ellipsis-v'></i></button>
-          <ul class='dropdown-menu'>";
-        foreach ($opsi as $menu) {
-          print $menu;
+      foreach ($column as $th) {
+        print "<th>$th</th>";
+      }
+
+
+      if (isset($opsi['menu'])) {
+        print "<th>Opsi</th>";
+      }
+
+      print "</tr></thead><tbody>";
+      $result = $select->fetchAll(\PDO::FETCH_ASSOC);
+      foreach ($result as $td) {
+        print "<tr id='25'>";
+        foreach ($td as $hasil) {
+          print "<td>$hasil</td>";
         }
-        print "</ul></div></td>";
+
+        if (isset($opsi['menu'])) {
+          print "<td>";
+          foreach ($opsi['menu'] as $menu) {
+            print $menu;
+          }
+          print "</td>";
+        }
+        print "</tr>";
       }
-      print "</tr>";
-    }
-    print "</tr></tbody>";
-    print "</table>";
-    if ($data != false) {
-      print "<script>$(document).ready(function() {
-              $('#tabel').DataTable();
-          } );</script>";
+      print "</tr></tbody>";
+      print "</table>";
+      if (isset($opsi['datatable'])) {
+        print "
+            <script>$(document).ready(function() {
+                $('#tabel').DataTable();
+            } );
+            </script>";
+      }
+    } else {
+      print "<table class='table table-striped'>";
+      print "<thead class='thead-dark'><tr>";
+      $select = $conn->query($sql);
+      $total_column = $select->columnCount();
+      for ($counter = 0; $counter < $total_column; $counter++) {
+        $meta = $select->getColumnMeta($counter);
+        $column[] = $meta['name'];
+      }
+      foreach ($column as $th) {
+        print "<th>$th</th>";
+      }
+      print "</tr></thead><tbody>";
+      $result = $select->fetchAll(\PDO::FETCH_ASSOC);
+      foreach ($result as $td) {
+        print "<tr id='asd'>";
+        foreach ($td as $hasil) {
+          print "<td>$hasil</td>";
+        }
+        print "</tr>";
+      }
+      print "</tr></tbody>";
+      print "</table>";
     }
   }
 
@@ -156,41 +216,6 @@ class naylatools
     $file     = "$lokasi/$nama";
     $success  = file_put_contents($file, $data);
     return $success;
-  }
-
-  public function createDB($dbHost, $dbUsername, $dbPassword, $dbName, $filePath)
-  {
-    $conn = new mysqli($dbHost, $dbUsername, $dbPassword);
-    $sql = "CREATE DATABASE `$dbName` ";
-    if ($conn->query($sql) === TRUE) {
-      $db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
-      $templine = '';
-
-      $lines = file($filePath);
-
-      $error = '';
-
-      foreach ($lines as $line) {
-        if (substr($line, 0, 2) == '--' || $line == '') {
-          continue;
-        }
-
-        $templine .= $line;
-
-        if (substr(trim($line), -1, 1) == ';') {
-          if (!$db->query($templine)) {
-            $error .= 'Error performing query "<b>' . $templine . '</b>": ' . $db->error . '<br /><br />';
-          }
-
-          $templine = '';
-        }
-      }
-      return !empty($error) ? $error : true;
-    } else {
-      echo "Error creating database: " . $conn->error;
-    }
-
-    $conn->close();
   }
 
   public function copyapp($dst, $file)
