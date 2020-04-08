@@ -1,7 +1,7 @@
 <?php
 class database
 {
-  public function pdoDB($host = "localhost", $user = "root", $pwd = "naylatools", $db = "crud")
+  public function pdoDB($host = "localhost", $user = "root", $pwd = "ilovesomeone", $db = "crud")
   {
     date_default_timezone_set("Asia/Bangkok");
 
@@ -81,10 +81,12 @@ class tampil
         $meta = $select->getColumnMeta($counter);
         $column[] = $meta['name'];
       }
+      if (isset($opsi['nomer'])) {
+        print "<th>No</th>";
+      }
       foreach ($column as $th) {
         print "<th>$th</th>";
       }
-
 
       if (isset($opsi['menu'])) {
         print "<th>Opsi</th>";
@@ -92,8 +94,13 @@ class tampil
 
       print "</tr></thead><tbody>";
       $result = $select->fetchAll(\PDO::FETCH_ASSOC);
+      $no = 0;
       foreach ($result as $td) {
         print "<tr id='25'>";
+        $no++;
+        if (isset($opsi['nomer'])) {
+          print "<td>$no</td>";
+        }
         foreach ($td as $hasil) {
           print "<td>$hasil</td>";
         }

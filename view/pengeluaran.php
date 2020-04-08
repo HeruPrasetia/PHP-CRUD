@@ -19,6 +19,7 @@
             $opsi = [
                 "menu" => $menu,
                 "datatable" => true,
+                "nomer" => true
             ];
             include "../sys/naylatools.php";
             $tampil = new tampil();
