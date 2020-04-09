@@ -7,15 +7,45 @@
 <div class="card mb-3">
     <div class="card-header">
         <i class="fa fa-table"></i> Data Pemasukan
-        <button class="btn btn-primary" onclick="$('#tampilModal').load('modul/inputpemasukan.php');" data-toggle="modal" data-target="#exampleModal">Tambah Data</button>
+        <button class="btn btn-primary" onclick="$('#tampilModal').load('modul/inputpemasukan.php');" data-toggle="modal" data-target="#modal">Tambah Data</button>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-        <?php
-            include "../sys/naylatools.php";
-            $tampil = new tampil();
-            $tampil->tabel("SELECT * FROM pemasukan");
-        ?>
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Jenis</th>
+                        <th>Jumlah</th>
+                        <th>Note</th>
+                        <th>Opsi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                    include "../sys/naylatools.php";
+                    $db = new database();
+                    $koneksi = $db->pdoDB();
+                    $no = 0;
+                    $query = $koneksi->query("SELECT * FROM pemasukan");
+                    while($data = $query->fetch()){
+                    $no++;
+                ?>
+                    <tr>
+                        <td><?php print $no; ?></td>
+                        <td><?php print $data->tanggal; ?></td>
+                        <td><?php print $data->jenis; ?></td>
+                        <td><?php print $data->jumlah; ?></td>
+                        <td><?php print $data->note; ?></td>
+                        <td>
+                            <button class="btn btn-warning" onclick="modal('modul/editpemasukan.php?id=<?php print $data->ID; ?>');" data-toggle="modal" data-target="#modal"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" onclick="modal('modul/hapuspemasukan.php?id=<?php print $data->ID; ?>');" data-toggle="modal" data-target="#modal"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                <?php } ?>
+                </tbody>
+            </table>
         </div>
         <script>
             function tes(){

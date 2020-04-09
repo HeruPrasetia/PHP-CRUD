@@ -67,6 +67,7 @@ function CurtomForm(data, halaman) {
 
 //modal load
 function modal(url, ukuran) {
+  $('#modal').show();
   $("#tampilModal").html("");
   $("#jenisModal").removeClass("modal-xl");
   $("#jenisModal").removeClass("modal-sm");

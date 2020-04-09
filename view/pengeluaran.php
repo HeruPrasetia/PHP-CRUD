@@ -17,7 +17,8 @@
                 "hapus" => "<button data-toggle='modal' data-target='#modal' onclick='alert(hapus);' class='btn btn-danger'> <i class='fa fa-trash'></i> Hapus</button>",
             ];
             $opsi = [
-                "menu" => $menu,#
+                "menu" => $menu,
+                "datatable" => true,
                 "nomer" => true
             ];
             include "../sys/naylatools.php";
